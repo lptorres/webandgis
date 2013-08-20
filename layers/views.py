@@ -32,10 +32,11 @@ def detail(request, layer_slug):
 
 def get_layer_data(layer_name):
     layer = Layer.objects.get(name=layer_name)
-    layer_path = os.path.join(settings.MEDIA_ROOT, 'layers', layer.slug, 'raw')
+    layer_path = str(os.path.join(
+        settings.MEDIA_ROOT, 'layers', layer.slug, 'raw'))
     os.chdir(layer_path)
     filename = glob.glob('*.shp')[0]
-    layer_file = os.path.join(layer_path, filename)
+    layer_file = str(os.path.join(layer_path, filename))
     return read_layer(layer_file)
 
 
