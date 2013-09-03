@@ -1,6 +1,7 @@
 import glob
 import os
 
+from django.views.generic import ListView, DetailView, CreateView
 from django.shortcuts import render, get_object_or_404
 from layers.models import Layer
 from django.conf import settings
@@ -10,7 +11,7 @@ from safe.impact_functions.inundation.flood_OSM_building_impact \
     import FloodBuildingImpactFunction
 from subprocess import call
 from django.contrib.auth.decorators import login_required
-
+from braces.views import LoginRequiredMixin, PermissionRequiredMixin
 
 def index(request):
     layers = Layer.objects.all()
@@ -18,6 +19,7 @@ def index(request):
     return render(request, 'layers/index.html', context)
 
 
+    
 def detail(request, layer_slug):
     layer = get_object_or_404(Layer, slug=layer_slug)
 
@@ -40,7 +42,7 @@ def get_layer_data(layer_name):
     return read_layer(layer_file)
 
 
-@login_required(redirect_field_name='next')
+#s@login_required(redirect_field_name='next')
 def calculate(request):
     """Calculates the buildings affected by flood.
     """
@@ -73,3 +75,16 @@ def calculate(request):
     context['user'] = request.user
 
     return render(request, 'layers/calculate.html', context)
+
+
+class LayerUploadView(LoginRequiredMixin, PermissionRequiredMixin,
+    CreateView):
+
+    permission_required = "auth.change_user"
+    model = Layer
+    #form_class = LayerUploadForm 
+    action = "uploaded"
+
+    
+class LayerListView(ListView):
+    model = Layer

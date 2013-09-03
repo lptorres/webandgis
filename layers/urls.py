@@ -1,9 +1,11 @@
 from django.conf.urls import patterns, url
-from layers.views import index, calculate, detail
+from views import LayerUploadView, LayerListView
+from views import index, calculate, detail
 
 urlpatterns = patterns(
     '',
-    url(r'^$', index, name='index'),
-    url(r'calculate/$', calculate, name='calculate'),
-    url(r'^(?P<layer_slug>[\w\-]+)/$', detail, name='detail'),
+    url(r'^$', LayerListView.as_view(), name='index'),
+    url(r'^calculate/$', calculate, name='calculate'),
+    url(r'^add/$', LayerUploadView.as_view(), name='create'),
+    url(r'^(?P<layer_slug>[\w\-]+)/$', detail, name='layer_detail'),
 )

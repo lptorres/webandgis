@@ -29,13 +29,15 @@ class Layer(models.Model):
                                 upload_to='uploads', null=True, blank=True,
                                 help_text="""Zip file with either geotiff and
                                 projection or shapefiles and friends""")
-    style = models.TextField(null=True, blank=True)
+    #style = models.TextField(null=True, blank=True)
     # type = models.CharField(max_length=255)
 
     def __unicode__(self):
         return self.name
 
-
+    def get_absolute_url(self):
+        return reverse("layer_detail", kwargs={"slug": self.slug})
+        
 def create_folder(path):
     try:
         os.makedirs(path)

@@ -1,0 +1,12 @@
+{% extends "site_base.html" %}
+
+{% block body %}
+    <h2>Layers</h2>
+    <ul>
+        {% for layer in object_list %}
+            <li><a href="{% url 'layer_detail' layer.slug %}">{{ layer.name }}</a></li>
+        {% empty %}
+            <p>Sorry, no layers here! Click here to <a href="/layers/create/">add a new layert</a>.</p>
+        {% endfor %}
+    </ul>
+{% endblock %}
